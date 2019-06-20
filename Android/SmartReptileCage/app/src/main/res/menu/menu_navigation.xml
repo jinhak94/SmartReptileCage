@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_reptile"
+        android:icon="@drawable/reptile"
+        android:title="@string/titleReptile" />
+    <item
+        android:id="@+id/navigation_graph"
+        android:icon="@drawable/graph"
+        android:title="@string/titleGraph"/>
+    <item
+        android:id="@+id/navigation_community"
+        android:icon="@drawable/community"
+        android:title="@string/titleCommunity"/>
+    <item
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/map"
+        android:title="@string/titleMap"/>
+    <item
+        android:id="@+id/navigation_setting"
+        android:icon="@drawable/setting"
+        android:title="@string/titleSetting" />
+
+</menu>

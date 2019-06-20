@@ -1,0 +1,138 @@
+<resources>
+    <string name="app_name">Smart Reptile Cage</string>
+
+    //가입하기
+    <string name="ID">아이디</string>
+    <string name="PW">비밀번호</string>
+    <string name="hintPw">8~16자 이내 영문자,숫자조합</string>
+    <string name="checkPw">비밀번호 확인</string>
+    <string name="Name">이름</string>
+    <string name="Phone">휴대전화</string>
+    <string name="Register">가입하기</string>
+
+    //로그인하기
+    <string name="_ID">  아이디</string>
+    <string name="_PW">  비밀번호</string>
+    <string name="loginState">로그인 상태 유지</string>
+    <string name="hintLogin">입력한 아이디는 가입되지 않은 계정입니다</string>
+    <string name="btnJoin">회원가입</string>
+    <string name="btnFindId">아이디 찾기</string>
+    <string name="btnFindPw">비밀번호 찾기</string>
+
+    //시스템 설정하기
+    <string name="settingSystem">SETTING</string>
+    <string name="autoLogin">자동 로그인</string>
+    <string name="hintAutoLogin">로그인 상태를 유지합니다</string>
+    <string name="feeding">먹이주기 기능</string>
+    <string name="hintFeeding">먹이주기 기능을 사용합니다</string>
+
+
+    //블루투스 연결하기
+    <string name="bluetooth">BLUE TOOTH</string>
+    <string name="connectState">연결 상태</string>
+    <string name="device">디바이스</string>
+    <string name="addressDevice">디바이스 주소</string>
+    <string name="listBluetooth">BLUETOOTH LIST</string>
+    <string name="connect">CONNECT</string>
+    <string name="disconnect">DISCONNECT</string>
+    <string name="stateWifi">Wi-Fi 상태</string>
+    <string name="idWifi">Wi-Fi ID</string>
+    <string name="pwWifi">Wi-Fi Pw</string>
+    <string name="searchWifi">Wi-Fi SEARCH</string>
+    <string name="connectWifi">Wi-Fi CONNECT</string>
+
+    // 아이디/비번 찾기
+    <string name="findByPhone">등록된 휴대폰 번호로 찾기</string>
+    <string name="findId">가입 당시 입력한 휴대전화 번호를 통해 아이디 찾기</string>
+    <string name="findPw">가입 당시 입력한 휴대전화 번호를 통해 비밀번호 찾기</string>
+    <string name="btnNext">NEXT</string>
+
+    //메뉴
+    <string name="settingNotice">시스템 설정</string>
+    <string name="settingBluetooth">블루투스 설정</string>
+    <string name="rasberry">IP/Port 설정</string>
+
+
+
+
+    //fragment_Graph
+    <string name="graph">GRAPH</string>
+
+
+    //fragment_cage
+    <string name="reptile">REPTILE</string>
+    <string name="ip">IP</string>
+    <string name="temp">온도</string>
+    <string name="humi">습도</string>
+    <string name="instantFeed">FEED</string>
+    <string name="deleteAutoFeed">STOP</string>
+    <string name="setAutoFeed">SET</string>
+    <string name="time">타이머 :</string>
+
+    //fragment_graph_tab1
+    <string name="mon">월</string>
+    <string name="tue">화</string>
+    <string name="wed">수</string>
+    <string name="thu">목</string>
+    <string name="fri">금</string>
+    <string name="sat">토</string>
+    <string name="sun">일</string>
+
+
+
+    //fragment_map
+    <string name="hospital">HOSPITAL</string>
+    <string name="not_yet">기능 미정</string>
+    <string name="searchHospital">병원 찾기</string>
+    <string name="searchCloseHospital">가까운 병원 찾기</string>
+
+    //탭이름
+    <string name="titleReptile">도마뱀 보기</string>
+    <string name="titleCommunity">커뮤니티</string>
+    <string name="titleSetting">설정</string>
+    <string name="titleMap">병원 찾기</string>
+    <string name="titleGraph">활동량</string>
+
+    <string name="notice">공지사항</string>
+    <string name="charge">13.5만원</string>
+    <string name="logout">로그아웃</string>
+    <string name="setting">설정</string>
+
+    <string name="community">Community</string>
+
+    <string name="writeUrl">http://</string>
+    <string name="moveUrl">http://218.37.72.70:8180/SmartCage/GetGraphInformation.jsp</string>
+    <string name="loginUrl">http://218.37.72.701:8180/SmartCage/MemberCheck.jsp</string>
+    <string name="registerUrl">http://218.37.72.70:8180/SmartCage/Register.jsp</string>
+    <string name="checkIdrUrl">http://218.37.72.70:8180/SmartCage/IDCheck.jsp</string>
+    <string name="communityReadUrl">http://218.37.72.70:8180/SmartCage/GetFreeBoardArticle.jsp</string>
+    <string name="getCageStatusUrl">http://218.37.72.70:8180/SmartCage/GetCageStatus.jsp</string>
+    <string name="streamingCage">http://218.37.72.70:8120/</string>
+
+    <string name="getFreeBoardListUrl">http://218.37.72.70:8180/SmartCage/GetFreeBoardList.jsp</string>
+    <string name="getFreeBoardArticleUrl">http://218.37.72.70:8180/SmartCage/GetFreeBoardArticle.jsp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //게시글 보기
+    <string name="community_read_title">게시글 제목</string>
+    <string name="community_read_memo">게시글 본문</string>
+    <string name="community_read_hit">게시글 조회수</string>
+    <string name="community_read_time">게시글 시간</string>
+    <string name="community_read_id">게시글 아이디</string>
+    <string name="community_separate">|</string>
+    <string name="community_text">COMMUNITY</string>
+
+    //게시글 쓰기
+    <string name="community_button_write">글쓰기</string>
+    <string name="community_write_title">제목</string>
+    <string name="community_write_content">"내용 : "</string>
+    <string name="community_write_save">"저장하기"</string>
+    <string name="community_write_back">"돌아가기"</string>
+
+    //게시글
+    <string name="community_name">게시글 이름</string>
+    <string name="community_writer">작성자</string>
+    <string name="community_hit">hit</string>
+    <string name="community_day">작성 날짜</string>
+</resources>
