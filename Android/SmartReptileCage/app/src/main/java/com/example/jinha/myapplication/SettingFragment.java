@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -27,9 +26,8 @@ public class SettingFragment extends Fragment {
     private ArrayAdapter<String> mAdapter;
     SharedPreferences setting;
     SharedPreferences.Editor editor;
-    String ID;
-    String PW;
-    static final String[] LIST_MENU = {"로그아웃" ,"설정"};
+
+    static final String[] LIST_MENU = {"로그아웃" ,"블루투스 설정", "시스템 설정"};
 
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -43,10 +41,7 @@ public class SettingFragment extends Fragment {
         listView.setAdapter(mAdapter);
         setting = this.getActivity().getSharedPreferences("setting",0);
         editor = setting.edit();
-        if (getArguments() != null) {
-            ID = getArguments().getString("ID", "");
-            PW = getArguments().getString("PW", "");
-        }
+
         // 리스트뷰 클릭 이벤트
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -65,32 +60,13 @@ public class SettingFragment extends Fragment {
                         Intent intent = new Intent(getContext(), LoginDialogActivity.class);
                         startActivity(intent);
                         break;
-                    case 1:
-                        PopupMenu p = new PopupMenu(getActivity(), view); // anchor : 팝업을 띄울 기준될 위젯
-                        getActivity().getMenuInflater().inflate(R.menu.menu_systemsetting, p.getMenu());
-                        // 이벤트 처리
-                        p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
-                        {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item)
-                            {
-                                switch (item.getItemId())
-                                {
-                                    case R.id.bluetoothSetting :
-                                        Intent intent1 = new Intent(getContext(), BluetoothFragment.class);
-                                        startActivity(intent1);
-                                        break;
-                                    case R.id.notification :
-                                        Intent intent2 = new Intent(getContext(), SettingSystemActivity.class);
-                                        intent2.putExtra("ID",ID);
-                                        intent2.putExtra("PW",PW);
-                                        startActivity(intent2);
-                                        break;
-                                }
-                                return false;
-                            }
-                        });
-                        p.show(); // 메뉴를 띄우기
+                    case 1: // 블루투스 설정
+                        Intent intent1 = new Intent(getContext(), BluetoothFragment.class);
+                        startActivity(intent1);
+                        break;
+                    case 2: // 시스템 설정
+                        Intent intent2 = new Intent(getContext(), SettingSystemActivity.class);
+                        startActivity(intent2);
                         break;
                     default:
                         break;

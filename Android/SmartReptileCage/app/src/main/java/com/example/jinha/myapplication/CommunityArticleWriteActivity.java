@@ -20,12 +20,20 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.example.jinha.myapplication.CommunityArticleReadActivity.getURLDecode;
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
 // JSON 생성까지 했고 https://maenan.tistory.com/6에서 서버 전송하는 부분 구현 필요
 // JSON 형식은
@@ -44,12 +52,30 @@ public class CommunityArticleWriteActivity extends AppCompatActivity {
     private Timer mTimer;
     String str_title;
     String str_content;
+    String tm;
+
+    public String readId()
+    {
+        String str = null;
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(getApplicationContext().getFilesDir() + "id.txt"));
+            str = null;
+            str = br.readLine();
+            //Toast.makeText(getContext(), str+"readId 함수 안", Toast.LENGTH_SHORT).show();
+        } catch (IOException e){
+            e.printStackTrace();
+        } catch(Exception e) {
+            Toast.makeText(getApplicationContext(), "Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        return str;
+    }
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_article_write);
-        Intent intent = getIntent();
-        id = intent.getStringExtra("ID");
+        id = readId();
+
         title = findViewById(R.id.title);
         content = findViewById(R.id.content);
         savebtn = findViewById(R.id.save_btn);
@@ -68,8 +94,27 @@ public class CommunityArticleWriteActivity extends AppCompatActivity {
                         title.getText().toString().length()!=0) {
                     str_title = title.getText().toString();
                     str_content = content.getText().toString();
-                    putServer();
-                    finish();
+                    String subTime1 = time.substring(0,10);
+                    String subTime2 = time.substring(11,19);
+                    tm = subTime1 + " " + subTime2;
+
+                    String utf_title = "", utf_memo = "", utf_id = "", utf_time = "";
+                    try {
+                        utf_title = URLEncoder.encode(str_title, "UTF-8");
+                        utf_memo = URLEncoder.encode(str_content, "UTF-8");
+                        utf_id = URLEncoder.encode(id, "UTF-8");
+                        utf_time = URLEncoder.encode(time, "UTF-8");
+                    } catch(Exception e) {
+
+                    }
+
+                    //Toast.makeText(getApplicationContext(), str_title, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), str_content, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), time, Toast.LENGTH_SHORT).show();
+
+                    putServer(str_title, str_content, id, time);
+                    //finish();
                 }else{
                     Toast.makeText(getApplicationContext(),"제목과 내용을 모두 입력해주세요!", Toast.LENGTH_SHORT).show();
                 }
@@ -111,6 +156,10 @@ public class CommunityArticleWriteActivity extends AppCompatActivity {
         mTimer.cancel();
         super.onPause();
     }
+    @Override
+    protected void onStop(){
+        super.onStop();
+    }
 
     @Override
     protected void onResume() {
@@ -119,7 +168,7 @@ public class CommunityArticleWriteActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    public void putServer()
+    public void putServer(final String getTitle, final String getMemo, final String getId, final String getTime)
     {
         RequestQueue postRequestQueue = Volley.newRequestQueue(this);
         String url = getString(R.string.writeUrl);
@@ -128,7 +177,23 @@ public class CommunityArticleWriteActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response)
             {
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String result = jsonObject.optString("RESULT");
+                    if(!(result.equals("1")))
+                    {
+                        //Toast.makeText(getApplicationContext(), "hello.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "not hello", Toast.LENGTH_SHORT).show();
 
+                    }
+                }
+                catch(org.json.JSONException e)
+                {
+                    e.printStackTrace();
+                }
+                finish();
             }
         }, new Response.ErrorListener()
         {
@@ -137,19 +202,20 @@ public class CommunityArticleWriteActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error)
             {
                 // Error Handling
-                Toast.makeText(getApplicationContext(), "시스템 오류", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
             }
         })
         {
+            //2019-06-21%21:23:35
             @Override
             protected Map<String,String> getParams() throws AuthFailureError
             {
-
+                //Toast.makeText(getApplicationContext(),"hi",Toast.LENGTH_SHORT).show();
                 Map<String, String> params = new HashMap<>();
-                params.put("TITLE", str_title);
-                params.put("CONTENT", str_content);
-                params.put("ID", id);
-                params.put("TIME", time);
+                params.put("TITLE", getTitle);
+                params.put("MEMO", getMemo);
+                params.put("ID", getId);
+                params.put("TIME", getTime);
                 return params;
             }
         };

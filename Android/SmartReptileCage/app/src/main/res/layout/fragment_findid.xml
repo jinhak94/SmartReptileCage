@@ -31,7 +31,7 @@
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="130dp"
+            android:layout_width="100dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:text="@string/Name"
@@ -65,7 +65,7 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="130dp"
+            android:layout_width="100dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:text="@string/Phone"
@@ -73,12 +73,33 @@
             android:textStyle="bold"
             android:textColor="#000000"/>
         <EditText
-            android:id="@+id/editPhone"
-            android:layout_width="210dp"
+            android:id="@+id/editPhone1"
+            android:layout_width="65dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:background="@drawable/edge_edittext"
+            android:inputType="phone"
+            android:textSize="20dp" />
+        <EditText
+            android:id="@+id/editPhone2"
+            android:layout_width="65dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:background="@drawable/edge_edittext"
+            android:inputType="phone"
+            android:textSize="20dp" />
+        <EditText
+            android:id="@+id/editPhone3"
+            android:layout_width="65dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/edge_edittext"
+            android:gravity="center"
             android:inputType="phone"
             android:textSize="20dp" />
     </LinearLayout>

@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 
 public class FindPwTab2 extends Fragment {
 
-    EditText editId, editName, editPhone;
+    EditText editId, editName, editPhone1, editPhone2, editPhone3;
     Button btnFindPw;
 
     public static FindPwTab2 newInstance() {
@@ -51,24 +51,31 @@ public class FindPwTab2 extends Fragment {
         //return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_findpw, container, false);
 
-        editId = (EditText)view.findViewById(R.id.editID);
+        editId = (EditText)view.findViewById(R.id.editId);
         editName = (EditText)view.findViewById(R.id.editName);
-        editPhone = (EditText)view.findViewById(R.id.editPhone);
+        editPhone1 = (EditText)view.findViewById(R.id.editPhone1);
+        editPhone2 = (EditText)view.findViewById(R.id.editPhone2);
+        editPhone3 = (EditText)view.findViewById(R.id.editPhone3);
         btnFindPw = (Button)view.findViewById(R.id.btnNextPw);
 
-        editName.setFilters(new InputFilter[]{filterKor}); // 이름 Edittext 한글만 입력가능
-        editId.setFilters(new InputFilter[]{filterEngNum}); // 아이디 Edittext 영어숫자만 입력가능
+        editName.setFilters(new InputFilter[]{filterKor});
+        editId.setFilters(new InputFilter[]{filterEngNum});
+         //
 
         btnFindPw.setOnClickListener(new View.OnClickListener() {
-            String id = editId.getText().toString();
-            String name = editName.getText().toString();
-            String phone = editPhone.getText().toString();
             @Override
             public void onClick(View v)
             {
+                String id = editId.getText().toString();
+                String name = editName.getText().toString();
+                String phone1 = editPhone1.getText().toString();
+                String phone2 = editPhone2.getText().toString();
+                String phone3 = editPhone3.getText().toString();
+                String phone = phone1 + "-" + phone2 + "-" + phone3;
                 if(id.equals("") || name.equals("") || phone.equals(""))
                     Toast.makeText(getContext(), "항목 입력을 확인해주세요", Toast.LENGTH_SHORT).show();
                 else
+                    Toast.makeText(getContext(), phone, Toast.LENGTH_SHORT).show();
                     findPw(id, name, phone);
             }
         });
@@ -85,7 +92,6 @@ public class FindPwTab2 extends Fragment {
             return null;
         }
     };
-
     public InputFilter filterEngNum = new InputFilter() {
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -97,10 +103,22 @@ public class FindPwTab2 extends Fragment {
         }
     };
 
+    public InputFilter filterEng = new InputFilter() {
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            Pattern ps = Pattern.compile("[a-zA-Z]*$");
+            if (!ps.matcher(source).matches()) {
+                return "";
+            }
+            return null;
+        }
+    };
+
+
     public void findPw(final String id, final String name, final String phone)
     {
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        String getCageStatusUrl = getString(R.string.getCageStatusUrl);
+        String getCageStatusUrl = getString(R.string.FindPwUrl);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, getCageStatusUrl, new Response.Listener<String>()
         {
             @Override
@@ -109,21 +127,24 @@ public class FindPwTab2 extends Fragment {
                 // Response
                 try
                 {
-                    JSONArray jarray = new JSONObject(response).getJSONArray("List"); // 대괄호 구별
-                    JSONObject jObject = jarray.getJSONObject(0); // 중괄호 구별
-                    String result = jObject.optString("RESULT"); // 아이디가 중복되었을 시에 1을 리턴
+                    JSONObject jsonMain = new JSONObject(response);
+                    String result = jsonMain.optString("RESULT"); // 아이디가 중복되었을 시에 1을 리턴
                     if(result.equals("1"))
                     {
-                        String password = jObject.optString("PASSWORD");
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle(password);
+                        String password = jsonMain.optString("PASSWORD");
+                       AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("비밀번호 찾기");
+                        builder.setMessage(password);
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
                                 dialog.dismiss();
+
                             }
                         });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
                     }
                     else
                     {
@@ -132,6 +153,7 @@ public class FindPwTab2 extends Fragment {
                 }
                 catch(JSONException e)
                 {
+                    Toast.makeText(getContext(), "시스템 오류", Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener()

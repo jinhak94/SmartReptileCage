@@ -83,6 +83,8 @@ public class RegisterActivity extends AppCompatActivity
             }
         });
 
+
+
         // 아이디 중복체크하고 edittext를 수정할 때 리스너
         inputId.addTextChangedListener(new TextWatcher() {
             @Override
@@ -263,10 +265,7 @@ public class RegisterActivity extends AppCompatActivity
         return isCheckPw;
     }
 
-    public void checkInput()
-    {
 
-    }
 
     public void register(final String id, final String password, final String name, final String phone)
     {

@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 
 public class FindIdTab1 extends Fragment {
 
-    EditText editName, editPhone;
+    EditText editName, editPhone1, editPhone2, editPhone3;
     Button btnFindId;
 
     public static FindIdTab1 newInstance(){
@@ -52,22 +52,28 @@ public class FindIdTab1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_findid,container,false);
 
         editName = (EditText)view.findViewById(R.id.editName);
-        editPhone = (EditText)view.findViewById(R.id.editPhone);
+        editPhone1 = (EditText)view.findViewById(R.id.editPhone1);
+        editPhone2 = (EditText)view.findViewById(R.id.editPhone2);
+        editPhone3 = (EditText)view.findViewById(R.id.editPhone3);
         btnFindId = (Button)view.findViewById(R.id.btnNextId);
 
         editName.setFilters(new InputFilter[]{filterKor}); // 이름 Edittext 한글만 입력가능
 
         btnFindId.setOnClickListener(new View.OnClickListener()
         {
-            String name = editName.getText().toString();
-            String phone = editPhone.getText().toString();
             @Override
             public void onClick(View v)
             {
+                String name = editName.getText().toString();
+                String phone1 = editPhone1.getText().toString();
+                String phone2 = editPhone2.getText().toString();
+                String phone3 = editPhone3.getText().toString();
+                String phone = phone1 + "-" + phone2 + "-" + phone3;
+                Toast.makeText(getContext(), phone, Toast.LENGTH_SHORT).show();
                 if(name.equals("") || phone.equals(""))
                     Toast.makeText(getContext(), "항목 입력을 확인해주세요", Toast.LENGTH_SHORT).show();
                 else
-                    findId(name, phone); // 웹으로 id랑 phone 넘겨주면 그거에 해당하는 아이디를 받아와야함... 뒤에서 3글자는 가려서 보여주기
+                    findId(name, phone);
             }
         });
 
@@ -86,12 +92,10 @@ public class FindIdTab1 extends Fragment {
         }
     };
 
-
-
     public void findId(final String name, final String phone)
     {
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        String getCageStatusUrl = getString(R.string.getCageStatusUrl);
+        String getCageStatusUrl = getString(R.string.FindIdUrl);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, getCageStatusUrl, new Response.Listener<String>()
         {
             @Override
@@ -100,14 +104,14 @@ public class FindIdTab1 extends Fragment {
                 // Response
                 try
                 {
-                    JSONArray jarray = new JSONObject(response).getJSONArray("List"); // 대괄호 구별
-                    JSONObject jObject = jarray.getJSONObject(0); // 중괄호 구별
-                    String result = jObject.optString("RESULT"); // 아이디가 중복되었을 시에 1을 리턴
+                    JSONObject jsonMain = new JSONObject(response);
+                    String result = jsonMain.optString("RESULT"); // 아이디가 중복되었을 시에 1을 리턴
                     if(result.equals("1"))
                     {
-                        String Id = jObject.optString("ID");
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle(Id);
+                        String Id = jsonMain.optString("ID");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("아이디 찾기");
+                        builder.setMessage(Id);
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
@@ -115,6 +119,9 @@ public class FindIdTab1 extends Fragment {
                                 dialog.dismiss();
                             }
                         });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+
                     }
                     else
                     {
@@ -123,6 +130,7 @@ public class FindIdTab1 extends Fragment {
                 }
                 catch(JSONException e)
                 {
+                    Toast.makeText(getContext(), "시스템 오류 json", Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener()

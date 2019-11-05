@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -44,14 +45,17 @@
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".BluetoothFragment" />
-        <activity android:name=".SettingActivity" />
         <activity android:name=".SettingSystemActivity" />
         <activity android:name=".CommunityArticleReadActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CommunityArticleWriteActivity"/>
+        <activity android:name=".CommunityArticleWriteActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".FindActivity"></activity>
     </application>
 

@@ -312,7 +312,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         return c54;
     }
 
-    public short bearingP1toP2(double P1_latitude, double P1_longitude, double P2_latitude, double P2_longitude)
+    public void bearingP1toP2(double P1_latitude, double P1_longitude, double P2_latitude, double P2_longitude)
     {
         // 현재 위치 : 위도나 경도는 지구 중심을 기반으로 하는 각도이기 때문에 라디안 각도로 변환한다.
         double Cur_Lat_radian = P1_latitude * (3.141592 / 180);
@@ -345,12 +345,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             true_bearing = radian_bearing * (180 / 3.141592);
         }
 
-        return (short)true_bearing;
     }
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         // OnMapReadyCallback implements 해야 mapView.getMapAsync(this); 사용가능. this 가 OnMapReadyCallback
         final Location location = new Location("");
+
         //LatLng는 위도와 경도를 저장하는 자료형
         //location.getLatitude()와 location.getLongitude()는 현재 위도와 경도를 받아오는 메소드
         LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
@@ -363,6 +363,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
 
         final LatLng[] lat = new LatLng[10];
+
         lat[0] = new LatLng(37.328938, 127.076683);
         lat[1] = new LatLng(35.135524, 129.090830);
         lat[2] = new LatLng(35.201373, 129.098787);

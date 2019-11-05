@@ -55,18 +55,19 @@ public class GraphFragmentTab2 extends Fragment {
     }
 
     public void SetGraph(){
-        MyMarkerView marker = new MyMarkerView(getActivity(),R.layout.markerviewtext);
+        MyMarkerView marker = new MyMarkerView(getActivity(), R.layout.markerviewtext);
+
         marker.setChartView(lineChart);
         lineChart.setMarker(marker);
 
 
         List<Entry> entries = new ArrayList<>();
         for(int i=0; i<7; i++){
-            entries.add(new Entry(i, weeklyDistance[i]));
+            entries.add(new Entry(i, weeklyDistance[i]/25));
         }
 
 
-        LineDataSet lineDataSet = new LineDataSet(entries ,"활동량");
+        LineDataSet lineDataSet = new LineDataSet(entries ,"활동량(cm)");
         lineDataSet.setLineWidth(2);
         lineDataSet.setCircleRadius(6);
         lineDataSet.setCircleColor(Color.parseColor("#FFA1B4DC"));

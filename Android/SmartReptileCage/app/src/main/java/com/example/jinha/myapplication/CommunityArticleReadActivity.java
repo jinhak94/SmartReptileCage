@@ -58,6 +58,11 @@ public class CommunityArticleReadActivity extends AppCompatActivity{
         //Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
         getArticle(str);
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+        getArticle(str);
+    }
     public static String getURLDecode(String content){
         try {
             return URLDecoder.decode(content, "utf-8");   // UTF-8
@@ -81,9 +86,9 @@ public class CommunityArticleReadActivity extends AppCompatActivity{
                 {
                     JSONObject jsonObject = new JSONObject(response);
                     result = jsonObject.optString("RESULT");
-                    if(result.equals("1"))
+                    if(!(result.equals("1")))
                     {
-                        //Toast.makeText(getApplicationContext(), "RESULT == 1", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "게시글을 불러오지 못했습니다.", Toast.LENGTH_LONG).show();
                     }
                     title = getURLDecode(jsonObject.optString("title"));
                     memo = getURLDecode(jsonObject.optString("memo"));
@@ -106,7 +111,6 @@ public class CommunityArticleReadActivity extends AppCompatActivity{
             public void onErrorResponse(VolleyError error)
             {
                 // Error Handling
-                textView_title.setText("That didn't work!");
                 Toast.makeText(getApplicationContext(),error.toString(), Toast.LENGTH_SHORT).show();
             }
         })

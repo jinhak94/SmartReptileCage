@@ -25,12 +25,14 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
 public class CommunityFragment extends Fragment {
+    private ArrayList<Integer> matched;
     Button button2;
 
     int postNum; // 전체 게시물 개수
@@ -77,6 +79,8 @@ public class CommunityFragment extends Fragment {
         listview = (ListView) layout.findViewById(R.id.List_view);
 
         //어뎁터 할당
+
+        adapter.notifyDataSetChanged();
         listview.setAdapter(adapter);
 
         getPostCount(0, 1);
@@ -85,7 +89,10 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                 Intent intent = new Intent(getActivity(), CommunityArticleReadActivity.class);  //MainActivity 대신에 여기다가 게시물 자바 쓰면됨
-                intent.putExtra("position", Long.toString(adapter.getItemId(pos))); // 이게 게시물 번호 넘기는거임. position 이란 이름으로 넘기니까 오빠가 받아서 출력하기 ㄱㄱ
+
+                String intentStr = String.format("%d", matched.get((int)adapter.getItemId(pos)));
+                intent.putExtra("position", intentStr); // 이게 게시물 번호 넘기는거임. position 이란 이름으로 넘기니까 오빠가 받아서 출력하기 ㄱㄱ
+                //intent.putExtra("position", matched.get(Long.toString(adapter.getItemId(pos)))); // 이게 게시물 번호 넘기는거임. position 이란 이름으로 넘기니까 오빠가 받아서 출력하기 ㄱㄱ
                 startActivity(intent);
             }
         });
@@ -167,6 +174,7 @@ public class CommunityFragment extends Fragment {
             {
                 try
                 {
+                    matched = new ArrayList<>();
                     JSONObject jsonObject  = new JSONObject(response);  // 응답으로 받은 JSONObject
                     JSONArray jarray = jsonObject.getJSONArray("List"); // 대괄호 구별x
                     int getNum = jsonObject.getInt("RESULT"); // 받은 JSONObject 중 COUNT만 파싱
@@ -175,7 +183,9 @@ public class CommunityFragment extends Fragment {
                         String writer, exTitle, title, date, hit;
                         for (int i = 0; i < getNum; i++)
                         {
+
                             JSONObject jObject = jarray.getJSONObject(i); // 중괄호 구별
+                            matched.add(Integer.parseInt(jObject.optString("num")));
                             hit = jObject.optString("hit"); //조회수
                             writer = jObject.optString("id"); // 작성자
                             exTitle = jObject.optString("title");

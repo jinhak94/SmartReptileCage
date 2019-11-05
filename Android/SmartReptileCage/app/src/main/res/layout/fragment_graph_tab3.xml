@@ -5,16 +5,13 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".GraphFragmentTab3">
-
     <Button
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="10dp"
         android:visibility="invisible"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <GridView
             android:background="@drawable/black_border"
             android:id="@+id/gridView"

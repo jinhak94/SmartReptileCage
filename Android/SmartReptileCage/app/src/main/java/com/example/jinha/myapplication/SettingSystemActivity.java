@@ -10,11 +10,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 public class SettingSystemActivity extends AppCompatActivity {
 
     Switch swAutoLogin;
     String id;
     String pw;
+    String Switch = "1";
     TextView tv;
     SharedPreferences setting;
     SharedPreferences.Editor editor;
@@ -28,26 +31,26 @@ public class SettingSystemActivity extends AppCompatActivity {
         pw = intent.getStringExtra("PW");
         setting = getSharedPreferences("setting",0);
         editor = setting.edit();
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-
-
 
         swAutoLogin = (Switch)findViewById(R.id.swAutoLogin); // 자동로그인
-        if(pref.getBoolean("Auto_Login_enabled", Boolean.parseBoolean(""))){
+        if(Objects.equals(setting.getString("Switch", ""), "1")){
             swAutoLogin.setChecked(true);
-        };
+        }
+
         swAutoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // The toggle is enabled
                     editor.putString("ID", id);
                     editor.putString("PW", pw);
+                    editor.putString("Switch", Switch);
                     editor.putBoolean("Auto_Login_enabled",true);
                     editor.apply();
                 } else {
                     // The toggle is disabled
                     editor.remove("ID");
                     editor.remove("PW");
+                    editor.remove("Switch");
                     editor.remove("Auto_Login_enabled");
                     editor.clear();
                     editor.commit();

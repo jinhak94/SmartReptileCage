@@ -22,15 +22,19 @@
 				jObject.put("RESULT", "0");
 			}
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("select humi, temp, date from cage where id = '" + id + "';");
+			ResultSet rs = stmt.executeQuery("select humi, temp, date, feedtime, feedleft from cage where id = '" + id + "';");
 			if(rs.next()) {
 				jObject.put("RESULT", "1");
 				String humi = URLEncoder.encode(rs.getString("humi"), "UTF-8");
 				String temp = URLEncoder.encode(rs.getString("temp"), "UTF-8");
 				String date = URLEncoder.encode(rs.getString("date"), "UTF-8");
+				String feedtime = URLEncoder.encode(rs.getString("feedtime"), "UTF-8");
+				String feedleft = URLEncoder.encode(rs.getString("feedleft"), "UTF-8");
 				jObject.put("humi", humi);
 				jObject.put("temp", temp);
 				jObject.put("date", date);
+				jObject.put("feedtime", feedtime);
+				jObject.put("feedleft", feedleft);
 				}
 			else {
 				jObject.put("RESULT", "0");

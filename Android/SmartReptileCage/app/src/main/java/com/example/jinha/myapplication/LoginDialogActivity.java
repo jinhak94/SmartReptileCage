@@ -6,12 +6,15 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -36,16 +39,13 @@ public class LoginDialogActivity extends AppCompatActivity {
     private BackPressCloseHandler backPressCloseHandler;
     SharedPreferences setting;
     SharedPreferences.Editor editor;
-    Button btnJoin;
-    Button btnFindId;
-    Button btnFindPw;
-    Button btnLogin;
+    Button btnJoin, btnFindId, btnFindPw, btnLogin;
     CheckBox stateLogin;
-    EditText userName;
-    EditText password;
+    EditText userName, password;
     String txtId, txtPassword;
     String ID, PW;
-
+    String Switch = "1";
+    TextView txtAlarmLogin;
 
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -62,9 +62,7 @@ public class LoginDialogActivity extends AppCompatActivity {
         password = (EditText)findViewById(R.id.password);
         setting = getSharedPreferences("setting", MODE_PRIVATE);
         editor = setting.edit();
-
-//        SharedPreferences sf = getSharedPreferences("sFile", MODE_PRIVATE); //저장된 값을 불러오기 위해 같은 네임파일을 찾음.
-//        String text = sf.getString("text","");  //text라는 key에 저장된 값이 있는지 확인, 아무 값도 들어있지 않으면 ""를 반환
+        txtAlarmLogin = (TextView)findViewById(R.id.txtAlarmLogin);
 
         ID = userName.getText().toString();
         PW = password.getText().toString();
@@ -75,11 +73,13 @@ public class LoginDialogActivity extends AppCompatActivity {
                 if(isChecked){
                     editor.putString("ID", ID);
                     editor.putString("PW", PW);
+                    editor.putString("Switch",Switch);
                     editor.putBoolean("Auto_Login_enabled",true);
                     editor.apply();
                 }else{
                     editor.remove("ID");
                     editor.remove("PW");
+                    editor.remove("Switch");
                     editor.remove("Auto_Login_enabled");
                     editor.clear();
                     editor.commit();
@@ -93,19 +93,23 @@ public class LoginDialogActivity extends AppCompatActivity {
 
         }
 
+          userName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+              @Override
+              public void onFocusChange(View v, boolean hasFocus) {
+                  if (hasFocus == true)
+                  {
+                        txtAlarmLogin.setText("");
+                  }
+              }
+          });
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 테스트용 코드
-                String ID = userName.getText().toString();
                 txtId = userName.getText().toString();
                 txtPassword = password.getText().toString();
-                saveId(txtId); // 아이디를 파일에 저장하는 함수
-                //Toast.makeText(getApplicationContext(), txtId, Toast.LENGTH_SHORT);
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class );
-                intent.putExtra("ID",txtId);
-                intent.putExtra("PW",txtPassword);
-                startActivity(intent);
+                MemberCheck(txtId, txtPassword);
             }
         });
 
@@ -195,12 +199,17 @@ public class LoginDialogActivity extends AppCompatActivity {
                     String result = jObject.optString("RESULT");
                     if(result.equals("1"))
                     {
+                        txtAlarmLogin.setText("");
+                        saveId(id);
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("ID",id);
+                        intent.putExtra("PW",password);
                         startActivity(intent);
                     }
                     else
                     {
-                        Toast.makeText(getApplicationContext(), "아이디/비밀번호가 틀렸습니다", Toast.LENGTH_SHORT).show();
+                        txtAlarmLogin.setTextColor(Color.RED);
+                        txtAlarmLogin.setText(R.string.hintLogin);
                     }
                 }
                 catch(org.json.JSONException e)

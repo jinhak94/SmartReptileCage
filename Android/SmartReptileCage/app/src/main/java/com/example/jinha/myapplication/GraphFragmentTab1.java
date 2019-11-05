@@ -97,13 +97,13 @@ public class GraphFragmentTab1 extends Fragment implements View.OnClickListener 
 
         List<Entry> entries = new ArrayList<>();
         for(int i=start; i<last; i++){
-            entries.add(new Entry(j, distance[i]));
+            entries.add(new Entry(j, distance[i]/25));
             j++;
         }
         j = 0;
 
 
-        LineDataSet lineDataSet = new LineDataSet(entries ,"활동량");
+        LineDataSet lineDataSet = new LineDataSet(entries ,"활동량(cm)");
         lineDataSet.setLineWidth(2);
         lineDataSet.setCircleRadius(6);
         lineDataSet.setCircleColor(Color.parseColor("#FFA1B4DC"));

@@ -3,7 +3,7 @@
 
 <%
 //초기 선언
-	request.setCharacterEncoding("EUC-KR");
+	request.setCharacterEncoding("UTF-8");
 
 	JSONObject jsonMain = new JSONObject();
 	JSONArray jArray = new JSONArray();
@@ -40,6 +40,7 @@
 			}
 		}
 		catch (Exception e) {
+			out.println(e.toString());
 			jsonMain.put("RESULT", "0");
 		}
 		finally {

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,9 +48,10 @@ public class CageFragment extends Fragment {
     private View rootView;
 
     // Layout 변수 선언
-    TextView textTemperature, textHumidity, textDate;
-    Button btnShowStreaming;
-    ProgressBar progressTemp, progressHumi;
+    TextView textTemperature, textHumidity, textFeed, textDate;
+    Button btnShowStreaming, btnInstantFeed, btnDeleteAutoFeed, btnSetFeeding;
+    Spinner spinner;
+    ProgressBar progressTemp, progressHumi, progressFeed;
     private boolean runFlag = false;
     private final String zero = "0 / 100";
     public CageFragment() {
@@ -69,10 +71,17 @@ public class CageFragment extends Fragment {
 
         textTemperature = rootView.findViewById(R.id.txtTemp);
         textHumidity = rootView.findViewById(R.id.txtHum);
+        textFeed = rootView.findViewById(R.id.txtFeed);
         btnShowStreaming = rootView.findViewById(R.id.btnShowStreaming);
         textDate = rootView.findViewById(R.id.txtDate);
         progressTemp = rootView.findViewById(R.id.progressTemp);
         progressHumi = rootView.findViewById(R.id.progressHumi);
+        progressFeed = rootView.findViewById(R.id.progressFeed);
+
+        btnInstantFeed = rootView.findViewById(R.id.btnInstantFeed);
+        btnDeleteAutoFeed = rootView.findViewById(R.id.btnDeleteAutoFeed);
+        btnSetFeeding = rootView.findViewById(R.id.btnSetFeeding);
+        spinner = rootView.findViewById(R.id.spinner);
 
 
         final String finalID = readId();
@@ -103,6 +112,37 @@ public class CageFragment extends Fragment {
             }
         });
 
+        btnInstantFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                instantFeed(finalID);
+                //Toast.makeText(getContext(), finalID, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnDeleteAutoFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                deleteAutoFeed(finalID);
+            }
+        });
+
+
+
+        btnSetFeeding.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                String spinnerTime = spinner.getSelectedItem().toString();
+                int feedtime = Integer.parseInt(spinnerTime);
+                //Toast.makeText(getContext(), spinnerTime, Toast.LENGTH_SHORT).show();
+                setAutoFeed(finalID, feedtime);
+            }
+        });
+
+
         Thread getThread;
         final Handler mHandler = new Handler();
 
@@ -118,7 +158,7 @@ public class CageFragment extends Fragment {
                     });
                     try
                     {
-                        Thread.sleep(5000); //5초마다 온습도 정보 가져오게 하기위해서
+                        Thread.sleep(2000); //5초마다 온습도 정보 가져오게 하기위해서
                     }
                     catch(Exception e)
                     {
@@ -181,16 +221,65 @@ public class CageFragment extends Fragment {
         textTemperature.setText(zero);
         progressTemp.setProgress(0);
         textDate.setText("");
+        textFeed.setText(zero);
+        progressFeed.setProgress(0);
     }
 
-    public void setStatus(String temp, String humi)
+    public void setStatus(String temp, String humi, String feedtime, String feedleft)
     {
         int Temp = Integer.parseInt(temp);
         int Humi = Integer.parseInt(humi);
-        textTemperature.setText(temp + " / 100");
+        int FeedTime = (Integer.parseInt(feedtime))/3600;
+        int FeedLeft = Integer.parseInt(feedleft);
+        double Feed;
+        String ft = String.valueOf(FeedTime);
+        StringBuilder sb = new StringBuilder();
+        int fl = Integer.parseInt(feedleft);
+        if((fl/3600)==0){
+            int f1 = fl / 60;
+            int f2 = fl % 60;
+            String sf1 = String.valueOf(f1);
+            String sf2 = String.valueOf(f2);
+            sb.append(sf1);
+            sb.append("분 ");
+            sb.append(sf2);
+            sb.append("초");
+            sb.append (" / ");
+        }else{
+            int f1 = fl / 3600;
+            int f2 = (fl % 3600) / 60;
+            int f3 = (fl % 3600) % 60;
+            sb.append(String.valueOf(f1));
+            sb.append("시간 ");
+            sb.append(String.valueOf(f2));
+            sb.append("분 ");
+            sb.append(String.valueOf(f3));
+            sb.append("초 ");
+            sb.append(" / ");
+        }
+        sb.append(ft);
+        sb.append("시간  ");
+
+        textTemperature.setText(temp + "Cº");
         progressTemp.setProgress(Temp);
-        textHumidity.setText(humi + " / 100");
+        textHumidity.setText(humi + "%");
         progressHumi.setProgress(Humi);
+
+        try {
+            if(FeedLeft==99999999){
+                //textFeed.setText(feedtime);
+                //progressFeed.setProgress(100);
+            }else {
+                Feed = (((double)FeedLeft / (double)(FeedTime*3600))) * 100;
+                int Feed2 = (int)Feed;
+                textFeed.setText(sb);
+                progressFeed.setProgress(Feed2);
+            }
+        }catch(Exception e){
+            int Feed1 = 0;
+            textFeed.setText("미설정");
+            progressFeed.setProgress(Feed1);
+        }
     }
 
     public void getCageStatus(final String id) //DB에서 온습도 정보 가져오기
@@ -213,6 +302,9 @@ public class CageFragment extends Fragment {
                         String date = jObject.optString("date"); // 1970년으로부터의 시간
                         String temp = jObject.optString("temp");
                         String humi = jObject.optString("humi");
+                        String feedtime = jObject.optString("feedtime");
+                        String feedleft = jObject.optString("feedleft");
+
                         long time = Long.parseLong(date);
                         long curTime = System.currentTimeMillis() / 1000;
                         long timePeriod = curTime - time;
@@ -223,7 +315,7 @@ public class CageFragment extends Fragment {
                         Date dateObj = new Date(time * 1000);
                         String str = df.format(dateObj);
                         textDate.setText(str);
-                        setStatus(temp, humi);
+                        setStatus(temp, humi, feedtime, feedleft);
                     }
                     else
                     {
@@ -231,7 +323,158 @@ public class CageFragment extends Fragment {
                         progressHumi.setProgress(0);
                         textTemperature.setText("?");
                         progressTemp.setProgress(0);
+                        textFeed.setText("?");
+                        progressFeed.setProgress(0);
                         textDate.setText("");
+                    }
+                }
+                catch(JSONException e)
+                {
+                    Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                // Error Handling
+                //Toast.makeText(getContext(), "시스템 오류", Toast.LENGTH_SHORT).show();
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("ID", id);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+
+    public void instantFeed(final String id) //DB에서 온습도 정보 가져오기
+    {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String getCageStatusUrl = getString(R.string.instantFeedUrl); //온습도를 받아오는 url
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getCageStatusUrl, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response)
+            {
+                // Response
+                try
+                {
+                    JSONObject jObject = new JSONObject(response);
+                    String result = jObject.optString("RESULT"); // 아이디가 중복되었을 시에 1을 리턴
+                    if(result.equals("1"))
+                    {
+                        Toast.makeText(getContext(), "먹이를 지급하였습니다", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //result가 0일 때
+                        Toast.makeText(getContext(), "연결이 실패했습니다", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch(JSONException e)
+                {
+                }
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                // Error Handling
+                Toast.makeText(getContext(), "시스템 오류", Toast.LENGTH_SHORT).show();
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("ID", id);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+
+    public void setAutoFeed(final String id, final int feed) //DB에서 온습도 정보 가져오기
+    {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String getCageStatusUrl = getString(R.string.setAutoFeedUrl); //온습도를 받아오는 url
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getCageStatusUrl, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response)
+            {
+                // Response
+                try
+                {
+                    JSONObject jObject = new JSONObject(response);
+                    String result = jObject.optString("RESULT"); // 아이디가 중복되었을 시에 1을 리턴
+                    if(result.equals("1"))
+                    {
+                        Toast.makeText(getContext(), "먹이지급이 예약되었습니다", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //result가 0일 때
+                        Toast.makeText(getContext(), "연결이 실패했습니다", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch(JSONException e)
+                {
+                }
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                // Error Handling
+                //Toast.makeText(getContext(), "시스템 오류", Toast.LENGTH_SHORT).show();
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError
+            {
+                Map<String, String> params = new HashMap<>();
+                String feedtime = Integer.toString(feed * 3600);
+                params.put("ID", id);
+                params.put("FEEDTIME", feedtime);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+    public void deleteAutoFeed(final String id) //DB에서 온습도 정보 가져오기
+    {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String getCageStatusUrl = getString(R.string.deleteAutoFeedUrl); //온습도를 받아오는 url
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getCageStatusUrl, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response)
+            {
+                // Response
+                try
+                {
+                    JSONObject jObject = new JSONObject(response);
+                    String result = jObject.optString("RESULT"); // 아이디가 중복되었을 시에 1을 리턴
+                    if(result.equals("1"))
+                    {
+                        Toast.makeText(getContext(), "먹이지급이 취소되었습니다", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //result가 0일 때
+                        Toast.makeText(getContext(), "연결이 실패했습니다", Toast.LENGTH_SHORT).show();
                     }
                 }
                 catch(JSONException e)

@@ -29,13 +29,16 @@
 				jObject.put("RESULT", "0");
 			}
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("select id, title, time, hit from board where num >= " + startIdxStr + " and num <= " + endIdxStr + ";");
+			ResultSet rs = stmt.executeQuery("select num, id, title, time, hit from board where num >= " + startIdxStr + " and num <= " + endIdxStr + ";");
 			while(rs.next()) {
 				jObject = new JSONObject();
+				String num = URLEncoder.encode(rs.getString("num"), "UTF-8");
 				String id = URLEncoder.encode(rs.getString("id"), "UTF-8");
 				String title = URLEncoder.encode(rs.getString("title"), "UTF-8");
 				String time = URLEncoder.encode(rs.getString("time"), "UTF-8");
 				String hit = URLEncoder.encode(rs.getString("hit"), "UTF-8");
+				
+				jObject.put("num", num);
 				jObject.put("id", id);
 				jObject.put("title", title);
 				jObject.put("time", time);
@@ -43,10 +46,10 @@
 				jArray.add(articleCnt++, jObject);
 			}
 			
-			rs = stmt.executeQuery("SELECT COUNT(*) FROM board");
+			rs = stmt.executeQuery("SELECT max(num) FROM board");
 			if(rs.next()) {
 				jObject = new JSONObject();
-				String cnt = URLEncoder.encode(rs.getString("COUNT(*)"));
+				String cnt = URLEncoder.encode(rs.getString("max(num)"));
 				jsonMain.put("COUNT", cnt);
 			}
 		}

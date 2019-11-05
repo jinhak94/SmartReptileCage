@@ -1,6 +1,7 @@
 package com.example.jinha.myapplication;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         String ID = intent.getStringExtra("ID");
@@ -149,13 +151,17 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
             else if (item.getItemId()==R.id.navigation_community) {
+
                 fm.beginTransaction().hide(active).show(fragment_community).commit();
                 active = fragment_community;
+                //fm.beginTransaction().replace(R.id.pager, fragment_community).commit();
                 //Intent intent = new Intent(getApplicationContext(), CommunityActivity.class);
                 //startActivity(intent);
+                //fm.beginTransaction().detach(fragment_community).attach(fragment_community).commit();
                 return true;}
             else if (i.equals(setting)) {
                 fm.beginTransaction().hide(active).show(fragment_setting).commit();
+
                 active = fragment_setting;
                 return true;
             } else if (i.equals(map)) {

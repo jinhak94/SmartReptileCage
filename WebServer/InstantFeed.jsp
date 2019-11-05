@@ -25,7 +25,7 @@
 				jObject.put("RESULT", "0");
 			}
 			stmt = conn.createStatement();
-			int n = stmt.executeUpdate("update cage set feedleft = 0 where id = '" + id + "';");
+			int n = stmt.executeUpdate("update cage set feedleft = 99999999 where id = '" + id + "';");
 		
 			if(n != 0) {
 				jsonMain.put("RESULT", "1");

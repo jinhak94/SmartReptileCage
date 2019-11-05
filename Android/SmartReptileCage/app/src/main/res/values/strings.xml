@@ -11,10 +11,11 @@
     <string name="Register">가입하기</string>
 
     //로그인하기
+    <string name="login">LOGIN</string>
     <string name="_ID">  아이디</string>
     <string name="_PW">  비밀번호</string>
     <string name="loginState">로그인 상태 유지</string>
-    <string name="hintLogin">입력한 아이디는 가입되지 않은 계정입니다</string>
+    <string name="hintLogin">가입되지 않은 계정입니다</string>
     <string name="btnJoin">회원가입</string>
     <string name="btnFindId">아이디 찾기</string>
     <string name="btnFindPw">비밀번호 찾기</string>
@@ -52,11 +53,9 @@
     <string name="settingBluetooth">블루투스 설정</string>
     <string name="rasberry">IP/Port 설정</string>
 
-
-
-
     //fragment_Graph
     <string name="graph">GRAPH</string>
+
 
 
     //fragment_cage
@@ -64,10 +63,12 @@
     <string name="ip">IP</string>
     <string name="temp">온도</string>
     <string name="humi">습도</string>
-    <string name="instantFeed">FEED</string>
-    <string name="deleteAutoFeed">STOP</string>
-    <string name="setAutoFeed">SET</string>
-    <string name="time">타이머 :</string>
+    <string name="feed">먹이</string>
+    <string name="instantFeed">INSTANT FEED</string>
+    <string name="deleteAutoFeed">AUTO FEED OFF</string>
+    <string name="setAutoFeed">AUTO FEED ON</string>
+    <string name="hour">시간</string>
+    <string name="time">Timer</string>
 
     //fragment_graph_tab1
     <string name="mon">월</string>
@@ -96,21 +97,29 @@
     <string name="notice">공지사항</string>
     <string name="charge">13.5만원</string>
     <string name="logout">로그아웃</string>
-    <string name="setting">설정</string>
+    <string name="setting">SETTING</string>
 
     <string name="community">Community</string>
+    <string name="signup">SIGN UP</string>
 
-    <string name="writeUrl">http://</string>
-    <string name="moveUrl">http://218.37.72.70:8180/SmartCage/GetGraphInformation.jsp</string>
-    <string name="loginUrl">http://218.37.72.701:8180/SmartCage/MemberCheck.jsp</string>
-    <string name="registerUrl">http://218.37.72.70:8180/SmartCage/Register.jsp</string>
-    <string name="checkIdrUrl">http://218.37.72.70:8180/SmartCage/IDCheck.jsp</string>
-    <string name="communityReadUrl">http://218.37.72.70:8180/SmartCage/GetFreeBoardArticle.jsp</string>
-    <string name="getCageStatusUrl">http://218.37.72.70:8180/SmartCage/GetCageStatus.jsp</string>
-    <string name="streamingCage">http://218.37.72.70:8120/</string>
+    <string name="writeUrl">http://218.37.237.165:8180/SmartCage/WriteFreeBoard.jsp</string>
+    <string name="moveUrl">http://218.37.237.165:8180/SmartCage/GetGraphInformation.jsp</string>
+    <string name="loginUrl">http://218.37.237.165:8180/SmartCage/MemberCheck.jsp</string>
+    <string name="registerUrl">http://218.37.237.165:8180/SmartCage/Register.jsp</string>
+    <string name="checkIdrUrl">http://218.37.237.165:8180/SmartCage/IDCheck.jsp</string>
+    <string name="communityReadUrl">http://218.37.237.165:8180/SmartCage/GetFreeBoardArticle.jsp</string>
+    <string name="getCageStatusUrl">http://218.37.237.165:8180/SmartCage/GetCageStatus.jsp</string>
+    <string name="streamingCage">http://218.37.237.165:8120/</string>
+    <string name="FindIdUrl">http://218.37.237.165:8180/SmartCage/FindID.jsp</string>
+    <string name="FindPwUrl"> http://218.37.237.165:8180/SmartCage/FindPassword.jsp</string>
 
-    <string name="getFreeBoardListUrl">http://218.37.72.70:8180/SmartCage/GetFreeBoardList.jsp</string>
-    <string name="getFreeBoardArticleUrl">http://218.37.72.70:8180/SmartCage/GetFreeBoardArticle.jsp</string>
+
+    <string name="getFreeBoardListUrl">http://218.37.237.165:8180/SmartCage/GetFreeBoardList.jsp</string>
+    <string name="getFreeBoardArticleUrl">http://218.37.237.165:8180/SmartCage/GetFreeBoardArticle.jsp</string>
+    <string name="instantFeedUrl">http://218.37.237.165:8180/SmartCage/InstantFeed.jsp</string>
+    <string name="setAutoFeedUrl">http://218.37.237.165:8180/SmartCage/SetAutoFeed.jsp</string>
+    <string name="deleteAutoFeedUrl">http://218.37.237.165:8180/SmartCage/DeleteAutoFeed.jsp</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
